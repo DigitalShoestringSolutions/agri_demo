@@ -1,0 +1,7 @@
+
+
+mqtt_in.broker = "{{mqtt_in_broker}}"
+
+
+mqtt_out.broker = "{{mqtt_out_broker}}"
+

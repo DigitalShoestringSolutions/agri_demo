@@ -1,0 +1,4 @@
+{
+    "mqtt_in_broker": "mqtt.docker.local",
+    "mqtt_out_broker": "mqtt.docker.local"
+}

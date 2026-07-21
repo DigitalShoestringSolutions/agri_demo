@@ -1,0 +1,351 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 5,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "power_monitoring"
+      ],
+      "targetBlank": false,
+      "title": "Power Monitoring Dashboards",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 18,
+        "x": 0,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": " <iframe id=\"embeddedFrame\" src=\"#\" width=\"100%\" height=\"100%\"> </iframe>\r\n<script>\r\nvar iframe = document.getElementById(\"embeddedFrame\");\r\n    iframe.src = \"http://\"+window.location.hostname+\"${graph_sm}\"+\"/period?bucket=${const_bucket}&window=${period}&graph=${graph}&from=${__from:date:iso}&to=${__to:date:iso}&total=true\"\r\n\r\n    function setIframeHeight() {\r\n      iframe.style.height = iframe.parentElement.offsetHeight + \"px\";\r\n    }\r\n\r\n    // Call setIframeHeight when the iframe content is loaded\r\n    //iframe.onload = setIframeHeight;\r\n\r\n    window.addEventListener(\"resize\", setIframeHeight);\r\n</script>",
+        "mode": "html"
+      },
+      "pluginVersion": "11.1.3",
+      "title": "Period over Period Comparison",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "watth"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb"
+          },
+          "query": "from(bucket: \"power_monitoring\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"energy\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy\")\r\n  |> group()\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> aggregateWindow(every: ${period}, fn: sum, createEmpty: false, timeSrc:\"_start\", column: \"energy\")\r\n  |> keep(columns: [\"_time\",\"energy\"])\r\n  |> sort(desc: true,columns: [\"energy\"])\r\n  |> limit(n:10)",
+          "refId": "A"
+        }
+      ],
+      "title": "Top 10 energy usage periods",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "power_real": 1,
+              "timestamp": 0
+            },
+            "renameByName": {
+              "_start": "Period",
+              "_time": "Time",
+              "_value": "Value",
+              "energy": "Energy",
+              "power_real": "Average Power",
+              "timestamp": "Timestamp"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "stepBefore",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watth"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 18,
+        "x": 0,
+        "y": 16
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb"
+          },
+          "query": "from(bucket: \"power_monitoring\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"energy\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy\")\r\n  |> group()\r\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\r\n  |> aggregateWindow(every: ${period}, fn: sum, createEmpty: true, timeSrc:\"_start\", column: \"energy\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Energy over Timeframe",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "",
+  "revision": 1,
+  "schemaVersion": 39,
+  "tags": [
+    "power_monitoring"
+  ],
+  "templating": {
+    "list": [
+      {
+        "hide": 2,
+        "label": "Influx Bucket",
+        "name": "const_bucket",
+        "query": "power_monitoring",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "day",
+          "value": "1h"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Trend Type",
+        "multi": false,
+        "name": "period",
+        "options": [
+          {
+            "selected": false,
+            "text": "hour",
+            "value": "10m"
+          },
+          {
+            "selected": true,
+            "text": "day",
+            "value": "1h"
+          },
+          {
+            "selected": false,
+            "text": "week",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "year",
+            "value": "1w"
+          }
+        ],
+        "query": "day : 1h, week : 1d, year : 1w",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "hide": 2,
+        "name": "graph_sm",
+        "query": ":8080",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "Bar",
+          "value": "bar"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Graph",
+        "multi": false,
+        "name": "graph",
+        "options": [
+          {
+            "selected": false,
+            "text": "Line",
+            "value": "line"
+          },
+          {
+            "selected": true,
+            "text": "Bar",
+            "value": "bar"
+          }
+        ],
+        "query": "Line : line, Bar : bar",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Trend (All)",
+  "uid": "i6b8d74Ik",
+  "version": 2,
+  "weekStart": ""
+}

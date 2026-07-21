@@ -1,0 +1,43 @@
+# This file defines the questions that will be asked to generate a user configuration file.
+# Each question has a unique key, a type, and other parameters depending on the type.
+# The criteria field is used to determine when a question should be asked, based on previous answers.
+# Criteria can use 'and' (&) and 'or' (|) operators, and parentheses for grouping.
+# for example: criteria = "a=1 & (b=2 | b=3)" means the question 
+# will be asked if the 'a' is '1' and the 'b' is either '2' or '3'.
+
+# The value of a question can be referenced in the user configuration template using {{<key>}}.
+# The following question types are supported:
+# - text: free text input from the user
+#     [Q.<key>]
+#       type = "text"
+#       criteria = "<criteria>"
+#       prompt = "<prompt>"         # what the user is asked
+# - select: user selects from a list of options
+#     [Q.<key>]
+#       type = "select"
+#       criteria = "<criteria>"
+#       prompt = "<prompt>"         # what the user is asked
+#       # each option is defined as:
+#       opt.<value> = "<option_text>" 
+#       opt.<next_value> = "<next_option_text>"  
+
+[Q.mqtt_in_broker]
+  type = "text"
+  prompt = "Which MQTT broker should the lorawan messages be received from?"
+
+[Q.mqtt_out_broker]
+  type = "text"
+  prompt = "Which MQTT broker should decoded messages be sent to?"
+
+[OUT.mqtt_in_broker]
+  var = "mqtt_in_broker"
+
+[OUT.mqtt_out_broker]
+  var = "mqtt_out_broker"
+
+
+# Note: The following lines are examples of how to reference the answers in the user configuration template.
+# For example, in user_config.toml, you can use {{machine_name}} to insert the machine name provided by the user.
+# module_config_file = "./module_config/{{module_config_file}}.toml"
+# calculation.machine_name.config.machine = "{{machine_name}}"
+# calculation.current_clamp.config.nominal_current = {{clamp_rating}}          

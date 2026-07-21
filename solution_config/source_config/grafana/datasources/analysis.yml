@@ -1,0 +1,12 @@
+apiVersion: 1
+
+datasources:
+  - name: Analysis Module
+    type: marcusolsson-json-datasource
+    version: 1
+    editable: true
+    access: proxy
+    url: http://analysis.docker.local:80
+    uid: json_api
+
+        
