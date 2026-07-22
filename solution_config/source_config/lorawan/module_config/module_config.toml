@@ -27,6 +27,11 @@
     identifier = "Soil"
     output_topic = "npk/{identifier}"
 
+[mapping.00603420]
+    type = "s31b"
+    identifier = "Zone A"
+    output_topic = "temp/{identifier}"
+
 [mapping.0061A3EB]
     type = "cs01"
     identifier = "Machine A"
