@@ -43,6 +43,8 @@
     port = 1883   #common mqtt ports are 1883 and 8883
     topic_prefix = ""
 
+    subscriptions = ["dragino-2e2f5c/#"]
+
     #reconnection characteristics
     # start: timeout = initial,
     # if timeout < limit then
