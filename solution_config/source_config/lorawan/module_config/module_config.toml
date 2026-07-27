@@ -29,6 +29,7 @@
 [mapping.0061A3EB]
     type = "cs01"
     identifier = "Machine A"
+    identifier_tag = "machine"
     multi_sample_offset_s = 10
     
 [mqtt_in]
