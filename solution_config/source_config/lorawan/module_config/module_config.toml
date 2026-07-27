@@ -5,37 +5,30 @@
 [mapping.0185196C]
     type = "llms01"
     identifier = "Leaves"
-    output_topic = "moisture/{identifier}"
 
 [mapping.005F3CDD]
     type = "lht65n_vib"
     identifier = "Vibration A"
-    output_topic = "vibration/{identifier}"
 
 [mapping.005CFC22]
     type = "sw3l"
     identifier = "Pipe A"
-    output_topic = "flow/{identifier}"
 
 [mapping.005B97BC]
     type = "lse01"
     identifier = "Soil"
-    output_topic = "moisture/{identifier}"
 
 [mapping.006110F7]
     type = "rs485_npk"
     identifier = "Soil"
-    output_topic = "npk/{identifier}"
 
 [mapping.00603420]
     type = "s31b"
     identifier = "Zone A"
-    output_topic = "temp/{identifier}"
 
 [mapping.0061A3EB]
     type = "cs01"
     identifier = "Machine A"
-    output_topic = "current/{identifier}"
     multi_sample_offset_s = 10
     
 [mqtt_in]
