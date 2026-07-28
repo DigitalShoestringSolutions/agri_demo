@@ -1,0 +1,1 @@
+This folder contains service modules that are specific to this solution and are therefore not git tracked separately. 

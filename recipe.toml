@@ -28,6 +28,19 @@ recipe_vsn = "1.0.0"
     ports.grafana.ui = 3000
     template.disable_sanitise_html = "true"
 
+[service_module.analysis]
+    source = "analysis"
+    containers = ["analysis-sm"]
+    ports.analysis-sm.api = 8000
+    alias.analysis-sm = "analysis"
+    template.log_level = "info"
+
+[service_module.graph]
+    source = "graph_src"
+    containers = ["graph-sm"]
+    alias.graph-sm = "graph"
+    ports.graph-sm.ui = 8080
+
 
 # Infrastructure modules present in this solution
 [infrastructure.mqtt-broker]
@@ -59,7 +72,7 @@ recipe_vsn = "1.0.0"
 
 [source.grafana]
     git.path = "sm_grafana_ui"
-    git.tag = "v2.0.0"
+    git.tag = "v2.2.0"
 
 [source.mqtt_broker]
     git.path = "sm_mqtt_broker"
@@ -68,3 +81,12 @@ recipe_vsn = "1.0.0"
 [source.logging]
     git.path = "Logging"
     git.tag = "v1.0.1"
+
+
+[source.analysis]
+    git.path = "sm_analysis"
+    git.tag = "v0.2.3"
+
+[source.graph_src]
+    file.path = "./custom_service_modules/graph"
+    file.mode = "link"

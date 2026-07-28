@@ -1,0 +1,5 @@
+[influx]
+	url = "http://timeseries-db.docker.local:8086"
+	token = "<replaced_by_env_variable>"
+	org = "SHOESTRING"	
+	bucket = "power_monitoring"

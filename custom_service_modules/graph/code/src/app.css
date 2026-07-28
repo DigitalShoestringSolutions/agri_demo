@@ -1,0 +1,8 @@
+body, #root, #frame{
+  margin: 0;
+  padding: 0;
+}
+
+#root, #frame{
+  height: 100vh;
+}

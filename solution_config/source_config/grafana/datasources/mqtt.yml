@@ -1,0 +1,11 @@
+apiVersion: 1
+
+datasources:
+  - name: MQTT Direct
+    type: grafana-mqtt-datasource
+    version: 1
+    editable: true
+    access: proxy
+    uid: mqtt_direct
+    jsonData:
+      uri: tcp://mqtt.docker.local:1883
