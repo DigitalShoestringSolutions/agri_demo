@@ -1,0 +1,165 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 12,
+    "links": [],
+    "panels": [
+        {
+            "datasource": {
+                "type": "influxdb",
+                "uid": "influxdb"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": 7200000,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 11,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 1,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "influxdb"
+                    },
+                    "query": "limited_window = if int(v: v.windowPeriod) > int(v: 15s) then v.windowPeriod else 15s\n\nfrom(bucket: \"${const_bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"leaf_moisture\")\n  |> filter(fn: (r) => r[\"identifier\"] == \"${identifier}\")\n  |> aggregateWindow(every: limited_window, fn: mean, createEmpty: true)\n  |> pivot(columnKey: [\"_field\"], rowKey: [\"_time\"], valueColumn: \"_value\")\n  |> keep(columns: [\"leaf_moisture\",\"leaf_temperature_c\",\"_time\",\"external_temperature_c\"])",
+                    "refId": "A"
+                }
+            ],
+            "title": "Leaf Moisture",
+            "type": "timeseries"
+        }
+    ],
+    "refresh": "30m",
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "hide": 2,
+                "name": "const_bucket",
+                "query": "power_monitoring",
+                "skipUrlSync": false,
+                "type": "constant"
+            },
+            {
+                "current": {
+                    "selected": false,
+                    "text": "Leaves",
+                    "value": "Leaves"
+                },
+                "datasource": {
+                    "type": "influxdb",
+                    "uid": "influxdb"
+                },
+                "definition": "from(bucket: \"${const_bucket}\")\n  |> range(start: -30d)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"leaf_moisture\")\n  |> keep(columns: [\"identifier\"])\n  |> distinct(column: \"identifier\")\n  |> filter(fn: (r) => r[\"identifier\"] != \"null\")\n  |> group()",
+                "hide": 0,
+                "includeAll": false,
+                "multi": false,
+                "name": "identifier",
+                "options": [],
+                "query": {
+                    "query": "from(bucket: \"${const_bucket}\")\n  |> range(start: -30d)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"leaf_moisture\")\n  |> keep(columns: [\"identifier\"])\n  |> distinct(column: \"identifier\")\n  |> filter(fn: (r) => r[\"identifier\"] != \"null\")\n  |> group()"
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            }
+        ]
+    },
+    "time": {
+        "from": "now-6h",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Leaf Moisture",
+    "uid": "dftdd37shujnkb",
+    "version": 4,
+    "weekStart": ""
+}
