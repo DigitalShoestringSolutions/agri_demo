@@ -1,0 +1,15 @@
+[Q.default_power_factor]
+type="text"
+prompt="Default Power Factor (used for machines that don't have one specified)"
+
+[Q.default_voltage]
+type="text"
+prompt="Default Voltage [Line-Neutral] (used for machines that don't have one specified)"
+
+
+[OUT.default_power_factor_value]
+var="default_power_factor"
+
+
+[OUT.default_voltage_value]
+var="default_voltage"
